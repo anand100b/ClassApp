@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 //custom components
 import{ TextBox} from './components/TextBox';
 import { ClickCounter } from './components/ClickCounter'
+import {Start} from './components/Start'
 
 // export default function App() {
 //   return (
@@ -21,14 +22,15 @@ import { ClickCounter } from './components/ClickCounter'
 
 export default class App extends Component {
   
-  constructor() {
-    this.state = {
-      secret:0,
-      guess:0,
-      feedback: ''
-    }
+  constructor() {  
 super()
-  }
+this.state = {
+  secret:0,
+  guess:0,
+  feedback: '',
+  correct:false
+   } 
+}
   setSecret(){
     let random = Math.round ( Math.random()*100 )
     this.setState( {secret:random} )
@@ -39,10 +41,11 @@ super()
   render () {
     return(
       <View style = {styles.container}>
-        <TextBox color='blue' size={24} text='Guess my number?'/>
+        <TextBox color='green' size={24} text='Guess my number?'/>
         <TextInput style ={styles.input} onChangeText={this.updateGuess} />
-        <Button title="check Guess"/>
+        <Button title="check Guess" onPress={this.checkGuess}/>
         <Text>{this.state.feedback}</Text>
+        <Start correct={this.state.correct} />
       </View>
     )
   }
@@ -56,6 +59,13 @@ super()
     const userGuess = parseInt (this.state.guess)
     if(this.state.guess == this.state.secret){
       this.setState({feedback:"You gussed right!"})
+      this.setState({correct:true})
+    }
+    else if(this.state.guess>this.state.secret){
+      this.setState( { feedback:'The number is smaller than' + userGuess})
+    }
+    else if(this.state.guess<this.state.secret){
+      this.setState( { feedback:'The number is larger than '+ userGuess})
     }
   }
 }
